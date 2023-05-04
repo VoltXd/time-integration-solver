@@ -6,6 +6,7 @@
 
 EulerSolver::EulerSolver()
 {
+    fptr_highestDerivative = nullptr;
     m_isSolverReady = false;
 }
 

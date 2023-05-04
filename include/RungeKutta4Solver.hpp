@@ -1,10 +1,10 @@
 #pragma once
 
-#include "FirstOrderDifferentialEquationSolver.hpp"
+#include "OrdinaryDifferentialEquationSolver.hpp"
 
 /// @brief Solver for 1st order differential equations using 4-Stage Runge-Kutta Method.
 /// Solving y' = a*y + u, knowing y(0), and where u is the input and y the output.
-class RungeKutta4Solver : public FirstOrderDifferentialEquationSolver
+class RungeKutta4Solver : public OrdinaryDifferentialEquationSolver
 {
     public:
     RungeKutta4Solver();

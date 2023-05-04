@@ -1,11 +1,11 @@
 #pragma once 
 
-#include "FirstOrderDifferentialEquationSolver.hpp"
+#include "OrdinaryDifferentialEquationSolver.hpp"
 
 
 /// @brief Solver for 1st order differential equations using Heun Method.
 /// Solving y' = a*y + u, knowing y(0), and where u is the input and y the output.
-class HeunSolver : public FirstOrderDifferentialEquationSolver
+class HeunSolver : public OrdinaryDifferentialEquationSolver
 {
     public:
     HeunSolver();

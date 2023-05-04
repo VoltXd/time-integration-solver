@@ -2,6 +2,7 @@
 
 RungeKutta4Solver::RungeKutta4Solver()
 {
+    fptr_highestDerivative = nullptr;
     m_isSolverReady = false;
 }
 

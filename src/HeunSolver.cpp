@@ -2,6 +2,7 @@
 
 HeunSolver::HeunSolver()
 {
+    fptr_highestDerivative = nullptr;
     m_isSolverReady = false;
 }
 
