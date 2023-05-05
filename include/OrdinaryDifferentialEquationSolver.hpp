@@ -16,7 +16,6 @@ class OrdinaryDifferentialEquationSolver
                     unsigned long numberOfSamples);
     virtual double iterate(double u) = 0;
     virtual void iterateAll(const std::vector<double>& uVector) = 0;
-    void unitStepError(double stepValue);
 
     void filePrintOutputSolutionAndError(const std::string& filename, double stepValue);
 
@@ -29,11 +28,12 @@ class OrdinaryDifferentialEquationSolver
     std::vector<double> m_timeVector;  
     std::vector<double> m_yVector;
 
+    /// @brief (a_0 a_1 ... a_N-1)^T. Example => d^N(y)/dt^N = a_N-1 d^N-1(y)/dt^N-1 + ... + a_0 y + u
     std::vector<double> m_coefficientsVector;
+    /// @brief (y(0) y'(0) ... d^N-1(y)/dt^N-1(0))^T
     std::vector<double> m_outputDerivativesVector;
 
     bool m_isSolverReady;
-    unsigned long m_equationOrder;
     double m_samplePeriod;
     unsigned long m_currentSampleIndex;
 

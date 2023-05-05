@@ -38,17 +38,20 @@ void OrdinaryDifferentialEquationSolver::initialise(double (*highestDerivative)(
     m_coefficientsVector = coefficientsVector;
     m_samplePeriod = samplePeriod;
 
-    // Allocate the number of samples in the time & output vector, compute the time vector and set the initial conditions.
+    // Allocate the number of samples in the time & output vector and compute the time vector
     m_timeVector.resize(numberOfSamples);
+    m_yVector.resize(numberOfSamples);
+
     m_timeVector.at(0) = 0;
     for (int i = 1; i < numberOfSamples; i++)
         m_timeVector.at(i) = m_timeVector.at(i - 1) + samplePeriod;
 
-    m_yVector.resize(numberOfSamples);
+    
+    // Set the initial conditions.
     m_yVector.at(0) = initialConditionsVector.at(0);
-
     m_outputDerivativesVector = initialConditionsVector;
 
+    // Init. iteration index
     m_currentSampleIndex = 1;
 }
 
@@ -82,21 +85,9 @@ void OrdinaryDifferentialEquationSolver::filePrintOutputSolutionAndError(const s
     {
         time = m_timeVector.at(i);
         solverY = m_yVector.at(i);
-        exactY = FirstOrderLODEwCCStepResponse(time, m_a, y0, constantInput);
+        exactY = secondOrderLODEwCCStepResponse(time, m_coefficientsVector.at(0), m_coefficientsVector.at(1), constantInput);
+        // exactY = firstOrderLODEwCCStepResponse(time, m_coefficientsVector.at(0), 0, constantInput);
         file << time << ';' << solverY << ';' << exactY << ';' << exactY - solverY << '\n';
     }
 
-}
-
-
-
-void OrdinaryDifferentialEquationSolver::unitStepError(double stepValue)
-{
-    unsigned long vectorsSize = m_timeVector.size();
-
-    std::vector<double> inputVector(vectorsSize, stepValue);
-    iterateAll(inputVector);
-
-    for (int i = 0; i < vectorsSize; i++)
-        m_yVector.at(i) -= FirstOrderLODEwCCStepResponse(m_timeVector.at(i), m_a, m_yVector.at(0), stepValue);
 }

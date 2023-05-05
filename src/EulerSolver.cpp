@@ -29,8 +29,13 @@ double EulerSolver::iterate(double u)
         return std::numeric_limits<double>::infinity();
     }
 
-    double yPrime = m_a * m_yVector.at(m_currentSampleIndex - 1) + u;
-    m_yVector.at(m_currentSampleIndex) = m_samplePeriod * yPrime + m_yVector.at(m_currentSampleIndex - 1);
+    // Compute the highest derivative value
+    double highestDerivativeValue = fptr_highestDerivative(m_timeVector.at(m_currentSampleIndex - 1), u, m_outputDerivativesVector, m_coefficientsVector);
+    m_outputDerivativesVector.back() += m_samplePeriod * highestDerivativeValue;
+    for (int i = m_outputDerivativesVector.size() - 2; 0 <= i; i--)
+        m_outputDerivativesVector.at(i) += m_samplePeriod * m_outputDerivativesVector.at(i + 1);  
+
+    m_yVector.at(m_currentSampleIndex) = m_outputDerivativesVector.at(0);
 
     return m_yVector.at(m_currentSampleIndex++);
 }
@@ -55,10 +60,15 @@ void EulerSolver::iterateAll(const std::vector<double>& uVector)
     }
 
     unsigned long numberOfSamples = m_yVector.size();
-    double yPrime;
+    double highestDerivativeValue;
     for (; m_currentSampleIndex < numberOfSamples; m_currentSampleIndex++)
     {
-        yPrime = m_a * m_yVector.at(m_currentSampleIndex - 1) + uVector.at(m_currentSampleIndex - 1);
-        m_yVector.at(m_currentSampleIndex) = m_samplePeriod * yPrime + m_yVector.at(m_currentSampleIndex - 1);
+        highestDerivativeValue = fptr_highestDerivative(m_timeVector.at(m_currentSampleIndex - 1), uVector.at(m_currentSampleIndex - 1), m_outputDerivativesVector, m_coefficientsVector);
+        m_outputDerivativesVector.back() += m_samplePeriod * highestDerivativeValue;
+        for (int i = m_outputDerivativesVector.size() - 2; 0 <= i; i--)
+        {
+            m_outputDerivativesVector.at(i) += m_samplePeriod * m_outputDerivativesVector.at(i + 1);  
+        }
+        m_yVector.at(m_currentSampleIndex) = m_outputDerivativesVector.at(0);
     }
 }
