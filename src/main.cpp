@@ -26,7 +26,7 @@ int main(int argc, char* argv[])
         Timer t;
         eulerSolver.iterateAll(inputVector);
     }
-    eulerSolver.filePrintOutputSolutionAndError("Euler.csv", RC * RC);
+    eulerSolver.filePrintOutputSolutionAndError("results/Euler.csv", RC * RC);
 
     // Heun Solver 
     std::cout << "Heun Method\n";
@@ -36,7 +36,7 @@ int main(int argc, char* argv[])
         Timer t;
         heunSolver.iterateAll(inputVector);
     }
-    heunSolver.filePrintOutputSolutionAndError("Heun.csv", RC * RC);
+    heunSolver.filePrintOutputSolutionAndError("results/Heun.csv", RC * RC);
 
     // 4-stage Runge-Kutta Solver 
     std::cout << "RK4 Method\n";
@@ -46,7 +46,7 @@ int main(int argc, char* argv[])
         Timer t;
         rk4Solver.iterateAll(inputVector);
     }
-    rk4Solver.filePrintOutputSolutionAndError("RK4.csv", RC * RC);
+    rk4Solver.filePrintOutputSolutionAndError("results/RK4.csv", RC * RC);
 
     return 0;
 }

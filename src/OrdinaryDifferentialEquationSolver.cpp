@@ -89,5 +89,4 @@ void OrdinaryDifferentialEquationSolver::filePrintOutputSolutionAndError(const s
         // exactY = firstOrderLODEwCCStepResponse(time, m_coefficientsVector.at(0), 0, constantInput);
         file << time << ';' << solverY << ';' << exactY << ';' << exactY - solverY << '\n';
     }
-
 }
