@@ -8,8 +8,7 @@
 class OrdinaryDifferentialEquationSolver
 {
     public:
-    void initialise(double (*highestDerivative)(double time, double input, const std::vector<double>& outputDerivativesVector, 
-                    const std::vector<double>& coefficientsVector), 
+    void initialise(ODE* highestDerivative, 
                     const std::vector<double>& coefficientsVector, 
                     const std::vector<double>& initialConditionsVector, 
                     double samplePeriod, 
@@ -23,7 +22,7 @@ class OrdinaryDifferentialEquationSolver
     inline std::vector<double> getTimeVector() const { return m_timeVector; } 
 
     protected:
-    double (*fptr_highestDerivative)(double time, double input, const std::vector<double>& outputDerivativesVector, const std::vector<double>& coefficientsVector);
+    ODE* fptr_highestDerivative;
 
     std::vector<double> m_timeVector;  
     std::vector<double> m_yVector;

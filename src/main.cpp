@@ -7,9 +7,11 @@
 #include "Timer.hpp"
 #include "HeunSolver.hpp"
 #include "Toolbox.hpp" 
+#include "CUDA_Euler.cuh"
 
 int main(int argc, char* argv[])
 {
+    // gpuHello();
     double RC = 10;
 
     // Input vector
@@ -24,7 +26,7 @@ int main(int argc, char* argv[])
     eulerSolver.initialise(linearODEwCC, coefficientsVector, initialConditionsVector, 1e-3, numberOfSamples);
     {
         Timer t;
-        eulerSolver.iterateAll(inputVector);
+        eulerSolver.iterateAll_CUDA(inputVector);
     }
     eulerSolver.filePrintOutputSolutionAndError("results/Euler.csv", RC * RC);
 

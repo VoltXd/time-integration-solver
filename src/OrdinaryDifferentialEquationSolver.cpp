@@ -2,7 +2,7 @@
 
 #include <fstream>
 
-void OrdinaryDifferentialEquationSolver::initialise(double (*highestDerivative)(double time, double input, const std::vector<double>& outputDerivativesVector, const std::vector<double>& coefficientsVector),
+void OrdinaryDifferentialEquationSolver::initialise(ODE* highestDerivative,
                                                     const std::vector<double>& coefficientsVector,
                                                     const std::vector<double>& initialConditionsVector, 
                                                     double samplePeriod, 

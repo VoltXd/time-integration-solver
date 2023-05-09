@@ -29,4 +29,6 @@ inline double secondOrderLODEwCCStepResponse(double time, double a0, double a1, 
     return (A * cos(omega * time) + B * sin(omega * time)) * exp(0.5 * a1 * time) - constantInput / a0; 
 }
 
-double linearODEwCC(double time, double input, const std::vector<double>& outputDerivativesVector, const std::vector<double>& coefficientVector);
+
+using ODE = double(double time, double input, const std::vector<double>& outputDerivativesVector, const std::vector<double>& coefficientVector);
+ODE linearODEwCC;
