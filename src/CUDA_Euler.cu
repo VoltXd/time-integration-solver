@@ -5,29 +5,9 @@
 #include "cuda_runtime.h"
 #include "device_launch_parameters.h"
 
-#include "Toolbox.hpp"
+#include "CUDA_Toolbox.cuh"
 
-__global__ void helloCuda()
-{
-   printf("GPU: Hello CUDA!\n");
-}
-
-void gpuHello()
-{
-    helloCuda<<< 1, 1 >>>();
-}
-
-__device__ double device_linearODEwCC(double input, const double* outputDerivativesVector, const double* coefficientVector, unsigned long equationOrder) 
-{
-    double result = input;
-    for (int i = 0; i < equationOrder; i++)
-        result += coefficientVector[i] * outputDerivativesVector[i];
-    return result;
-}
-
-ODE* deviceFPtr_highestDerivative;
-
-__global__ void kernel_EulerSolver(unsigned long numberOfSamples, double* outputDerivativesVector, double* coefficientsVector, double* uVector, double* yVector, unsigned long equationOrder, double samplePeriod)
+__global__ void kernel_eulerSolver(unsigned long numberOfSamples, double* outputDerivativesVector, double* coefficientsVector, double* uVector, double* yVector, const unsigned long equationOrder, double samplePeriod)
 {
     double highestDerivativeValue;
     unsigned long currentSampleIndex = 1;
@@ -47,6 +27,8 @@ void euler_iterateAll_CUDA(std::vector<double>& outputDerivativesVector, const s
 {
     // I won't use the fPtr for the highest derivative value in CUDA
     // I'll use a hardcoded function (linear ODE w/ CC) for the moment
+
+    // The init. and the result part should be wrapped in two functions, so that this function have only 3 calls (not sure the structure is the same).
 
     unsigned long numberOfSamples = yVector.size();
     unsigned long equationOrder = coefficientsVector.size();
@@ -68,7 +50,7 @@ void euler_iterateAll_CUDA(std::vector<double>& outputDerivativesVector, const s
     cudaMemcpy(cuda_uVector, uVector.data(), uVector.size() * sizeof(double), cudaMemcpyHostToDevice);
 
     // Run the kernel
-    kernel_EulerSolver<<<1, 1>>>(numberOfSamples, cuda_outputDerivativesVector, cuda_coefficientsVector, cuda_uVector, cuda_yVector, equationOrder, samplePeriod);
+    kernel_eulerSolver<<<1, 1>>>(numberOfSamples, cuda_outputDerivativesVector, cuda_coefficientsVector, cuda_uVector, cuda_yVector, equationOrder, samplePeriod);
 
     // Copy the result in the CPU memory
     cudaMemcpy(yVector.data(), cuda_yVector, yVector.size() * sizeof(double), cudaMemcpyDeviceToHost);

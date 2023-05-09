@@ -14,5 +14,8 @@ add_executable(${PROJECT_NAME} ${SOURCE_FILES} ${HEADER_FILES} ${CUDA_SOURCE_FIL
 # Set the directory where CMakeLists.txt is to be the working directory
 set_property(TARGET ${PROJECT_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
 
+# Allow separate .cu files compilation (allows you to write libraries/toolbox)
+set_property(TARGET ${PROJECT_NAME} PROPERTY CUDA_SEPARABLE_COMPILATION ON)
+
 # Target the include folder (used to make headers visible in visual studio)
 target_include_directories(${PROJECT_NAME} PRIVATE include)

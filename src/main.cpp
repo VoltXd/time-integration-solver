@@ -7,11 +7,9 @@
 #include "Timer.hpp"
 #include "HeunSolver.hpp"
 #include "Toolbox.hpp" 
-#include "CUDA_Euler.cuh"
 
 int main(int argc, char* argv[])
 {
-    // gpuHello();
     double RC = 10;
 
     // Input vector
@@ -36,7 +34,7 @@ int main(int argc, char* argv[])
     heunSolver.initialise(linearODEwCC, coefficientsVector, initialConditionsVector, 1e-3, numberOfSamples);
     {
         Timer t;
-        heunSolver.iterateAll(inputVector);
+        heunSolver.iterateAll_CUDA(inputVector);
     }
     heunSolver.filePrintOutputSolutionAndError("results/Heun.csv", RC * RC);
 
@@ -46,7 +44,7 @@ int main(int argc, char* argv[])
     rk4Solver.initialise(linearODEwCC, coefficientsVector, initialConditionsVector, 1e-3, numberOfSamples);
     {
         Timer t;
-        rk4Solver.iterateAll(inputVector);
+        rk4Solver.iterateAll_CUDA(inputVector);
     }
     rk4Solver.filePrintOutputSolutionAndError("results/RK4.csv", RC * RC);
 

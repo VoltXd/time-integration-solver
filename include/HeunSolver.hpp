@@ -12,4 +12,5 @@ class HeunSolver : public OrdinaryDifferentialEquationSolver
     
     double iterate(double u) override;
     void iterateAll(const std::vector<double>& uVector) override;
+    void iterateAll_CUDA(const std::vector<double>& uVector);
 };

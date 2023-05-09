@@ -1,5 +1,7 @@
 #include "HeunSolver.hpp"
 
+#include "CUDA_Heun.cuh"
+
 HeunSolver::HeunSolver()
 {
     fptr_highestDerivative = nullptr;
@@ -122,4 +124,30 @@ void HeunSolver::iterateAll(const std::vector<double>& uVector)
         }    
         m_yVector.at(m_currentSampleIndex) = m_outputDerivativesVector.at(0);
     }
+}
+
+void HeunSolver::iterateAll_CUDA(const std::vector<double>& uVector)
+{
+    // Iterations are possible only if the solver is properly set up.
+    if (!m_isSolverReady)
+    {
+        std::cout << "The solver is not ready...\n";
+        std::cout << "Number of samples allocated: " << m_yVector.size() << "\n\n";
+        return;
+    }
+
+    // Cannot iterate if the sample index is out of bounds
+    if (m_currentSampleIndex >= m_yVector.size())
+    {
+        std::cout << "You are trying to run the solver but every iterations are computed...\n";
+        std::cout << "Current index: " << m_currentSampleIndex << '\n';
+        std::cout << "Number of samples allocated: " << m_yVector.size() << "\n\n";
+        return;
+    }
+
+    unsigned long numberOfSamples = m_yVector.size();
+
+    heun_iterateAll_CUDA(m_outputDerivativesVector, m_coefficientsVector, uVector, m_yVector, m_samplePeriod);
+
+    m_currentSampleIndex = numberOfSamples;
 }
